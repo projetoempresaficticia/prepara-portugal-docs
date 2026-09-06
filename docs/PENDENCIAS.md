@@ -65,7 +65,10 @@ A AT ficou para trás. É o mesmo código, já escrito e testado.
 
 ## 4. Responsividade e acabamento
 
-- [ ] **Nunca foi visto num telemóvel.** Vale para os sete apps. As regras
+- [ ] **Nunca foi visto num telemóvel de verdade.** Vale para os oito apps.
+      O Pulso é o primeiro a ser visto em largura de telemóvel num browser
+      a sério (390px, Chrome), o que apanhou dois erros de desenho — mas um
+      browser estreitado não é um telemóvel na mão. As regras
       estão lá (`svh`, `clamp()`, grelhas que colapsam, listas em vez de
       tabelas) mas ninguém confirmou. **É a maior lacuna desta lista**, e a
       única que só se resolve com um telemóvel na mão.
@@ -121,7 +124,28 @@ A AT ficou para trás. É o mesmo código, já escrito e testado.
 
 ---
 
-## 6. Arrumação
+## 6. Pulso — o que ficou por fazer
+
+- [ ] **Sem "está a escrever".** O selo existe na biblioteca e não está
+      ligado a nada. Dá para fazer com o canal de presença do Supabase, sem
+      tocar na base.
+- [ ] **Sem estado online.** O ponto verde do kit também está desenhado e
+      por ligar, pelo mesmo caminho.
+- [ ] **Sem anexos nem imagens.** O AeroMail tem-nos; aqui uma conversa só
+      leva texto. O bucket `correio` e o `limparHtml` já resolvem o
+      problema difícil — falta a decisão de o trazer para cá.
+- [ ] **Sem tirar pessoas de um grupo.** Quem entra só sai por vontade
+      própria; nem o admin o pode fazer.
+- [ ] **Sem apagar uma conversa inteira**, só mensagem a mensagem.
+- [ ] **O histórico é de 200 mensagens** e não pagina. Passa-se disso e as
+      primeiras deixam de se ver.
+- [ ] **O Realtime recarrega tudo a cada mensagem.** Chama a RPC outra vez
+      em vez de acrescentar só a linha nova. É correto e é simples; com
+      conversas grandes vai pesar.
+
+---
+
+## 7. Arrumação
 
 - [ ] **Renomear a pasta local `pp-banco` para `prepacoin`** — o
       repositório já se chama assim; a pasta está presa por um handle do
@@ -133,7 +157,7 @@ A AT ficou para trás. É o mesmo código, já escrito e testado.
 
 ---
 
-## 7. A escala
+## 8. A escala
 
 O projeto foi desenhado para **~1000 formandos em ~200 empresas**. Hoje há
 **5 pessoas e 6 empresas**.

@@ -9,8 +9,8 @@ repositórios, não de memória.
 
 | | |
 |---|---|
-| Apps no ar | **7** de 12 |
-| Funções na base | **92** |
+| Apps no ar | **8** de 12 |
+| Funções na base | **111** |
 | Protocolos do Estado emitidos | **7** |
 | Empresas ativas | **6** |
 | Pessoas ativas | **5** |
@@ -44,6 +44,7 @@ existe — e um quinto órgão avisará sem se lembrar de nada.
 - [x] **Portal das Finanças (AT)** — e-Fatura, IVA, Modelo 22 · roxo
 - [x] **Segurança Social** — trabalhadores, TSU, carreira contributiva · ouro
 - [x] **AeroMail** (pp-correio) — correio interno, anexos, Realtime · turquesa
+- [x] **Pulso** (pp-mensagens) — conversas, grupos, número fictício · índigo
 
 ---
 
@@ -59,16 +60,20 @@ existe — e um quinto órgão avisará sem se lembrar de nada.
 
 ### 2. A outra metade do ecossistema — nada construído
 
-Os cinco repositórios que faltam existem e estão vazios.
+Os quatro repositórios que faltam existem e estão vazios.
 
 | app | precisa de | pode começar? |
 |---|---|---|
-| **pp-mensagens** | fundação | **já** |
 | **pp-emprego** | fundação | **já** |
 | **pp-utilities** | correio + órgãos | **já** — o correio está feito |
-| **pp-criar-empresa** | banco + **mensagens** | falta mensagens |
+| **pp-criar-empresa** | banco + mensagens | **já** — nada o bloqueia |
 | **pp-clientes** | correio + criar-empresa | falta criar-empresa |
 | **PRD-08** | tudo | portal único, painel do professor, mapa da cidade |
+
+> **Correção de uma dependência mal registada.** A `pp-criar-empresa`
+> constava como presa na `pp-mensagens`. Não estava: o que ela precisa de
+> lá é uma função só — `fn_gerar_numero` — que já existia na base desde a
+> fundação, completa e idempotente. O bloqueio nunca foi real.
 
 ### 3. A escala — o problema de fundo
 
@@ -85,7 +90,7 @@ Está preso na `pp-mensagens`, porque atribui números de telemóvel.
 Reunidas em [`PENDENCIAS.md`](PENDENCIAS.md), a ver no fim: decisões que
 são tuas, o que falta portar da Segurança Social para a AT, a dívida do
 `sqlerrm` e das permissões, e a responsividade — que nunca foi vista num
-telemóvel em nenhum dos sete apps.
+telemóvel em nenhum dos oito apps.
 
 ---
 
@@ -95,7 +100,11 @@ telemóvel em nenhum dos sete apps.
 interessante, mas porque é a única coisa entre aqui e o povoamento. Sem
 ela, encher o ecossistema é trabalho manual vezes duzentos.
 
-A alternativa defensável é **`pp-utilities`**, que o AeroMail acabou de
-destravar: já há por onde entregar as faturas de água, luz e internet, e é
-a única fonte de despesa recorrente que obriga as empresas a gerir
-tesouraria em vez de acumular saldo.
+**`pp-criar-empresa`**, agora que se sabe que nada a bloqueia. É a única
+coisa entre aqui e o povoamento: cinco pessoas e seis empresas contra as
+mil e as duzentas para que isto foi desenhado. Tudo o que está construído
+foi testado por **uma** empresa.
+
+A alternativa defensável é **`pp-utilities`**, que traz a despesa fixa que
+obriga as empresas a gerir tesouraria em vez de acumular saldo. Mas com
+seis empresas, isso muda pouco.
