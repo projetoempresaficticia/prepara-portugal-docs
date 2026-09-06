@@ -138,11 +138,10 @@ A AT ficou para trás. É o mesmo código, já escrito e testado.
       própria; nem o admin o pode fazer. Quem criou o grupo pode fechá-lo
       (as mensagens ficam para quem lá está), mas não pode expulsar
       ninguém.
-- [ ] **Uma conversa a dois não se apaga**, só mensagem a mensagem. Um
-      grupo já se apaga (por quem o criou), mas numa direta ninguém manda
-      na outra pessoa — apagá-la para os dois seria apagar as palavras
-      dela. Falta decidir se vale a pena um "esconder de mim" ao nível
-      da conversa, como o lixo do AeroMail.
+- [ ] **Limpar a minha cópia de um grupo sem sair dele.** A função
+      `msg_conversa_apagar` já aceita grupos — apaga a minha cópia e
+      deixa-me lá dentro, o que serve para um grupo com muito ruído — mas
+      no ecrã só a conversa a dois a oferece. Nos grupos só há "Sair".
 - [ ] **O histórico é de 200 mensagens** e não pagina. Passa-se disso e as
       primeiras deixam de se ver.
 - [ ] **O Realtime recarrega tudo a cada mensagem.** Chama a RPC outra vez
