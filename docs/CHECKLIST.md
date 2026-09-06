@@ -1,6 +1,6 @@
 # Checklist — Prepara Portugal
 
-Estado apurado a **6 de setembro de 2026**, medido no Supabase e nos
+Estado medido a **6 de setembro de 2026**, medido no Supabase e nos
 repositórios, não de memória.
 
 ---
@@ -10,8 +10,8 @@ repositórios, não de memória.
 | | |
 |---|---|
 | Apps no ar | **8** de 12 |
-| Funções na base | **111** |
-| Protocolos do Estado emitidos | **7** |
+| Funções na base | **113** |
+| Protocolos do Estado emitidos | **8** |
 | Empresas ativas | **6** |
 | Pessoas ativas | **5** |
 
