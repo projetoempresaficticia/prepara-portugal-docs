@@ -91,12 +91,22 @@ A AT ficou para trás. É o mesmo código, já escrito e testado.
       hoje em todos eles; se um dia deixar de funcionar, a alternativa é
       um editor de biblioteca — e isso traz um passo de compilação que o
       projeto não tem.
-- [ ] **Anexos ficam órfãos se o browser fechar a meio.** Fechar a janela
-      de escrita apaga os ficheiros já carregados, mas fechar o separador
-      não corre código nenhum. Falta uma limpeza periódica do que está no
-      bucket `correio` sem linha em `correio_anexos`.
+- [ ] **Anexos ficam órfãos em três casos.** (1) Fechar a janela de escrita
+      apaga os ficheiros já carregados, mas fechar o separador não corre
+      código nenhum. (2) Quando quem **recebeu** é o último a apagar de vez,
+      a linha morre e os caminhos são devolvidos, mas a policy do Storage só
+      deixa apagar quem pôs lá o ficheiro — e quem o pôs foi o remetente.
+      (3) Trocar de assinatura apaga o molde antigo, mas se essa chamada
+      falhar ninguém volta a tentar. Falta uma limpeza periódica do que está
+      no bucket `correio` sem linha em `correio_anexos`. Nenhum destes é
+      visível para quem usa: são bytes a ocupar espaço.
 - [ ] **Sem rascunhos.** Fechar a janela perde o que estava escrito.
-- [ ] **Sem apagar nem arquivar mensagens.** A caixa só cresce.
+- [ ] **Sem arquivar.** Apagar já existe (lixo, repor, apagar de vez), mas
+      não há como tirar da entrada sem deitar fora.
+- [ ] **Imagens coladas de fora são deitadas fora.** Colar uma imagem da
+      web no editor não a carrega como anexo — o corpo não aceita endereços,
+      por isso a imagem desaparece sem explicação. Devia carregá-la, ou pelo
+      menos dizer porquê.
 - [ ] **Os ícones de lista são desenhados à mão** no `am.css`, porque o
       conjunto descarregado do Figma (User Interface + Arrows) não traz
       nenhum. Os dois ficheiros novos que o Germano indicou — Gmail UI
