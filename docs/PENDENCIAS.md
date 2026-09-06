@@ -135,7 +135,9 @@ A AT ficou para trás. É o mesmo código, já escrito e testado.
       leva texto. O bucket `correio` e o `limparHtml` já resolvem o
       problema difícil — falta a decisão de o trazer para cá.
 - [ ] **Sem tirar pessoas de um grupo.** Quem entra só sai por vontade
-      própria; nem o admin o pode fazer.
+      própria; nem o admin o pode fazer. Quem criou o grupo pode fechá-lo
+      (as mensagens ficam para quem lá está), mas não pode expulsar
+      ninguém.
 - [ ] **Uma conversa a dois não se apaga**, só mensagem a mensagem. Um
       grupo já se apaga (por quem o criou), mas numa direta ninguém manda
       na outra pessoa — apagá-la para os dois seria apagar as palavras
