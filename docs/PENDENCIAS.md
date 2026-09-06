@@ -101,8 +101,13 @@ A AT ficou para trás. É o mesmo código, já escrito e testado.
       no bucket `correio` sem linha em `correio_anexos`. Nenhum destes é
       visível para quem usa: são bytes a ocupar espaço.
 - [ ] **Sem rascunhos.** Fechar a janela perde o que estava escrito.
-- [ ] **Sem arquivar.** Apagar já existe (lixo, repor, apagar de vez), mas
-      não há como tirar da entrada sem deitar fora.
+- [ ] **As pastas não se arrastam.** Mover é por botão e por janela. Puxar
+      uma mensagem para cima de uma pasta na lateral é o gesto que toda a
+      gente tenta primeiro, e não faz nada.
+- [ ] **Sem selecionar várias mensagens.** As funções do servidor
+      (`correio_mover`, `correio_arrumar`) já recebem listas e foram
+      testadas com duas de uma vez; falta a app deixar escolher mais do que
+      uma. Hoje só "Esvaziar o lixo" usa a lista.
 - [ ] **Imagens coladas de fora são deitadas fora.** Colar uma imagem da
       web no editor não a carrega como anexo — o corpo não aceita endereços,
       por isso a imagem desaparece sem explicação. Devia carregá-la, ou pelo
