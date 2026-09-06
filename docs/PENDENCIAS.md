@@ -136,7 +136,11 @@ A AT ficou para trás. É o mesmo código, já escrito e testado.
       problema difícil — falta a decisão de o trazer para cá.
 - [ ] **Sem tirar pessoas de um grupo.** Quem entra só sai por vontade
       própria; nem o admin o pode fazer.
-- [ ] **Sem apagar uma conversa inteira**, só mensagem a mensagem.
+- [ ] **Uma conversa a dois não se apaga**, só mensagem a mensagem. Um
+      grupo já se apaga (por quem o criou), mas numa direta ninguém manda
+      na outra pessoa — apagá-la para os dois seria apagar as palavras
+      dela. Falta decidir se vale a pena um "esconder de mim" ao nível
+      da conversa, como o lixo do AeroMail.
 - [ ] **O histórico é de 200 mensagens** e não pagina. Passa-se disso e as
       primeiras deixam de se ver.
 - [ ] **O Realtime recarrega tudo a cada mensagem.** Chama a RPC outra vez
