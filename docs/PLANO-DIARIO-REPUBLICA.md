@@ -22,6 +22,41 @@
 > autodeclaração já "Cumprida" com o anexo, e a atividade dirigida só a
 > ela com o botão de declarar. Zero erros de consola em toda a jornada.
 > **O Diário da República está completo e funcional de ponta a ponta.**
+>
+> **Atualização de 11 de setembro de 2026 — feedback direto do Germano
+> sobre a UI e decisão de desenho nova.** Duas mudanças aplicadas por
+> cima do que está descrito abaixo (o corpo do plano fica como registo
+> histórico de como foi construído primeiro; isto documenta a evolução):
+>
+> 1. **`atividades.tipo` (text) virou `atividades.tipos` (text[]) —
+>    E lógico, decisão explícita do Germano.** Uma atividade pode agora
+>    exigir vários tipos ao mesmo tempo; só conta como "Cumprida" quando
+>    **todos** estiverem verificados. `sql/006_atividades_multiplos_tipos.sql`
+>    reescreve `dr_atividade_publicar` (recebe `p_tipos text[]`),
+>    `dr_minhas_atividades` (devolve `provas jsonb[]` — uma
+>    `{tipo, cumprida, prova}` por tipo, `tipo=null` para a
+>    autodeclaração) e `dr_atividade_declarar`. Testado com SQL real:
+>    atividade com `publicar_vaga` + `pagar_salario`, uma cumprida e a
+>    outra não → selo geral corretamente "Por cumprir" (E não é vácuo).
+> 2. **Redesenho de "Publicar atividade":** tipo de atividade passa de
+>    `<select>` para tags multi-selecionáveis (`.dr-tags`); destinatário
+>    passa de radio buttons soltos para um alternador com ícone de
+>    empresa (`.dr-alvo-alternador`) + lista real de empresas para marcar
+>    (`.dr-lista-empresas`, lida de `public.empresas` — já tinha policy
+>    de leitura pública, sem RPC nova). A barra de formatação de texto
+>    (`.dr-ferramentas`/`.dr-editor`/`.dr-ligacao`) nunca tinha tido CSS
+>    nenhum — corrigido, com o estado "ativo" a virar preenchimento vinho
+>    sólido em vez de só mudar a cor do texto. `biblioteca.html` ganhou
+>    secções 10/11 a documentar os três componentes novos.
+>
+> Testado de ponta a ponta com Puppeteer contra o servidor local
+> (login real de professor e de empresa): seleção de duas tags, troca do
+> alternador com a lista real de 6 empresas a aparecer/desaparecer,
+> estado "pressed" do negrito a confirmar visualmente, e
+> `minhas-atividades.html` a mostrar uma linha de estado por tipo dentro
+> do cartão com E lógico. Auditor de contraste (WCAG real, Chrome
+> a sério) sem falhas em nenhuma das duas páginas, ecrã largo e
+> telemóvel.
 
 # Plano de implementação — Diário da República (atividades)
 

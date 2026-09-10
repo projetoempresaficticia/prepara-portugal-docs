@@ -4,7 +4,17 @@ Decidido a **10 de setembro de 2026**, em conversa com o Germano. Identidade
 visual, camada de dados (5 migrações, testadas com SQL real) e frontend
 completos e publicados em `projetoempresaficticia/diario-republica`. Ver
 `docs/PLANO-DIARIO-REPUBLICA.md` para o estado detalhado e os testes
-feitos. Falta só o teste de ponta a ponta pela interface com sessão real.
+feitos. Teste de ponta a ponta pela interface feito a 10 de setembro.
+
+**Atualização de 11 de setembro de 2026:** `atividade.tipo` (singular)
+passou a `atividade.tipos` (text[]) — uma atividade pode exigir vários
+tipos ao mesmo tempo, com **E lógico** (só "Cumprida" quando todos
+estiverem verificados; decisão explícita do Germano). Onde este documento
+ainda diz "tipo" no singular nas secções abaixo, isso é o desenho
+original — ver `sql/006_atividades_multiplos_tipos.sql` e a atualização no
+topo de `docs/PLANO-DIARIO-REPUBLICA.md` para a forma atual. A UI de
+"Publicar atividade" também foi redesenhada (tags em vez de `<select>`,
+alternador com ícone de empresa + lista real em vez de radio buttons).
 
 ---
 
