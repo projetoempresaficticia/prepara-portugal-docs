@@ -1,8 +1,10 @@
 # Tarefas — Diário da República
 
 Decidido a **10 de setembro de 2026**, em conversa com o Germano. Identidade
-visual já feita (`biblioteca.html`, publicada em
-`projetoempresaficticia/diario-republica`) — o que falta é tudo o resto.
+visual, camada de dados (5 migrações, testadas com SQL real) e frontend
+completos e publicados em `projetoempresaficticia/diario-republica`. Ver
+`docs/PLANO-DIARIO-REPUBLICA.md` para o estado detalhado e os testes
+feitos. Falta só o teste de ponta a ponta pela interface com sessão real.
 
 ---
 

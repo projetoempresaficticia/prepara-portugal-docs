@@ -1,11 +1,19 @@
-> **Estado em 10 de setembro de 2026:** todo o código das Fases 0, 1 e 2
-> está escrito, publicado e testado estruturalmente (Chrome real,
-> puppeteer-core — sem erros de consola, 0 falhas de contraste novas,
-> editor de formatação confirmado a funcionar). **Falta aplicar
-> `sql/001` a `005` ao Supabase e testar o fluxo de ponta a ponta** — a
-> ligação MCP caiu a meio desta sessão e continua desligada. Os passos
-> "aplicar"/"testar com SQL real" de cada tarefa abaixo ficam por marcar
-> até isso acontecer.
+> **Estado em 10 de setembro de 2026: Fases 0 e 1 aplicadas e testadas
+> por completo.** `sql/001` a `005` aplicados ao Supabase; testados com
+> SQL real (impersonação): professor publica e avisa por Correio (3
+> mensagens confirmadas); não-professor recusado; `publicar_vaga`
+> confirmado a passar de não-cumprida a cumprida assim que uma vaga real
+> foi publicada no Talentos, com a prova certa puxada ao vivo;
+> autodeclaração recusa sem anexo e aceita com o anexo confirmado no
+> Storage; uma atividade dirigida a uma empresa fica invisível para
+> outra empresa e fora da montra pública; auditor de segurança com 0
+> erros. Dois bugs reais apanhados e corrigidos nesta ronda:
+> `documentos.criado_em` (não `criada_em`), e `v_decl` como `record` a
+> embrulhar a prova da autodeclaração em vez de a devolver direta.
+>
+> Fase 2 (frontend) continua só testada estruturalmente (Chrome real,
+> sem sessão real) — falta um teste de ponta a ponta pela interface, que
+> pede credenciais de teste que ainda não tenho.
 
 # Plano de implementação — Diário da República (atividades)
 
