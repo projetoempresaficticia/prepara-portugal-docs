@@ -55,18 +55,41 @@ para trás; não é o desenho que se segue.
   do ecossistema (AT, SS, Cartório) — não se inventa um papel novo.
 - **Uma atividade publicada não se edita** — mesma regra do
   `hash_carimbo` dos órgãos: se for preciso corrigir, publica-se uma
-  retificação nova. (A confirmar com o Germano — pode ser preciso um botão
-  "encerrar" para uma atividade deixar de contar sem apagar o histórico.)
-- **Catálogo inicial de tipos com verificador automático — só quatro, só em
-  apps que já existem a sério** (nada de `pp-clientes`/Pulso: ainda não têm
-  tabela que sirva de prova):
+  retificação nova.
+- **Prazo ultrapassado não fecha nada sozinho.** A atividade continua viva;
+  se passou o prazo e a empresa ainda não cumpriu, fica visualmente a
+  vermelho — reaproveita o selo "Urgente" que já existe na biblioteca
+  (`dr-selo-urgente`). Não há estado `encerrada`: o vermelho É o aviso, não é
+  preciso um botão para o gerar nem para o desligar.
+- **Catálogo de tipos com verificador automático — todos os que hoje geram
+  protocolo/comprovativo a sério**, levantado ficheiro a ficheiro nas SQLs
+  de cada app (ver tabela abaixo). Ficam de fora o AeroMail e o Pulso: uma
+  mensagem trocada não prova que uma tarefa específica foi cumprida.
 
-  | tipo | app devido | tabela | confere |
+  | tipo | app devido | confere (tabela/coluna) | estado |
   |---|---|---|---|
-  | `publicar_vaga` | Talentos | `vagas` | existe linha da empresa com `estado = 'publicada'`, criada depois da atividade |
-  | `enviar_guia_iva` | AT | `submissoes` | `tipo = 'guia_iva'`, `estado = 'aprovado'`, criada depois da atividade |
-  | `registar_trabalhador` | Segurança Social | `submissoes` | `tipo = 'registo_trabalhador'`, `estado = 'aprovado'`, criada depois da atividade |
-  | `fazer_transferencia` | Prepacoin | `transacoes` | `origem_iban` da empresa, `estado = 'concluida'`, criada depois da atividade |
+  | `publicar_vaga` | Talentos | `vagas.estado = 'publicada'` | ativo |
+  | `entregar_guia_iva` | AT | `submissoes` tipo `guia_iva`, `aprovado` | ativo |
+  | `entregar_modelo22` | AT | `submissoes` tipo `modelo22`, `aprovado` | ativo |
+  | `admitir_trabalhador` | Segurança Social | `submissoes` tipo `registo_trabalhador`, `aprovado` | ativo |
+  | `cessar_trabalhador` | Segurança Social | `submissoes` tipo `cessacao_trabalhador`, `aprovado` | ativo |
+  | `entregar_tsu` | Segurança Social | `submissoes` tipo `tsu`, `aprovado` | ativo |
+  | `registar_empresa` | Cartório | `submissoes` tipo `registo_empresa`, `aprovado` | ativo (mais "dia zero" que recorrente) |
+  | `emitir_certidao` | Cartório | `submissoes` tipo `certidao_permanente`, protocolo `CERT-…` | ativo |
+  | `reconhecer_assinatura` | Cartório | `submissoes` tipo `reconhecimento`, `aprovado` | ativo |
+  | `alterar_registo` | Cartório | `submissoes` tipo `alteracao_registo`, `aprovado` | ativo |
+  | `pagar_salario` | Prepacoin | `transacoes.categoria = 'salario'`, `concluida` — dá para apontar a um funcionário via `destino_iban` | ativo |
+  | `assinar_documento` | Subsight | `documentos.estado = 'completo'` | ativo |
+  | `pagar_agua` | pp-utilities | `faturas.servico = 'agua'`, `boletos.estado = 'pago'` | **por ativar** — pp-utilities só tem README, zero tabelas |
+  | `pagar_energia` | pp-utilities | `faturas.servico = 'energia'`, idem | **por ativar** |
+  | `pagar_internet` | pp-utilities | `faturas.servico = 'internet'`, idem | **por ativar** |
+  | `pagar_aluguel` | pp-utilities | `faturas.servico = 'aluguel'`, idem | **por ativar** |
+
+  Os quatro "por ativar" entram já na tabela (a coluna `faturas.servico` é
+  texto livre, já aceita estes valores), mas ficam com `ativo = false` —
+  a professora não os vê no seletor até o pp-utilities existir a sério e
+  emitir faturas de verdade. Ligar, nessa altura, é só trocar a flag e
+  escrever o ramo do `case`, nada mais muda.
 
   Cresce por catálogo, não por código genérico — cada tipo novo pede uma
   entrada nova nesta tabela e o `case` da função de verificação.
@@ -78,11 +101,12 @@ para trás; não é o desenho que se segue.
 ### `atividade_tipos` — catálogo fechado (só isto tem verificador automático)
 | coluna | tipo | notas |
 |---|---|---|
-| tipo | text pk | `'publicar_vaga'`, `'enviar_guia_iva'`, … |
-| app_alvo | text | só informativo — 'talentos', 'AT', 'seg_social', 'prepacoin' |
+| tipo | text pk | `'publicar_vaga'`, `'entregar_guia_iva'`, … |
+| app_alvo | text | só informativo — 'talentos', 'AT', 'seg_social', 'cartorio', 'prepacoin', 'subsight', 'pp-utilities' |
 | descricao | text | mostrado à professora ao escolher |
 | link_sugerido | text | URL da página certa do app devido (ex.: `.../talentos/empresa.html`) |
 | campos_mostrados | text[] | que campos da tabela de origem aparecem como prova |
+| ativo | boolean default true | `false` para os tipos "por ativar" (pp-utilities) — escondidos do seletor até terem verificador de verdade |
 
 Catálogo, não texto livre — a professora escolhe de uma lista; escrita só
 por professor (mesma política do `orgao_tipos`).
@@ -96,10 +120,9 @@ por professor (mesma política do `orgao_tipos`).
 | tipo | text fk → atividade_tipos, nullable | null = autodeclaração + anexo |
 | alvo_todas | boolean | true = todas as empresas |
 | alvo_cedulas | text[] | usado só quando `alvo_todas = false` |
-| prazo | timestamptz | |
+| prazo | timestamptz | passar o prazo não muda nada sozinho — é só o que a UI compara para pintar a vermelho |
 | criada_por | text | cédula da professora |
 | criada_em | timestamptz | |
-| encerrada | boolean default false | fecha sem apagar — decisão em aberto, ver acima |
 
 ### `atividade_declaracoes` — só para o caminho sem verificador automático
 | coluna | tipo | notas |
@@ -149,25 +172,25 @@ guarda uma cópia que possa desalinhar da verdade.
 
 ### Fase 1 — motor
 - [ ] `dr_atividade_publicar` + o fan-out para `correio`
-- [ ] `dr_minhas_atividades` com os quatro verificadores do catálogo inicial
+- [ ] `dr_minhas_atividades` com os doze verificadores ativos (`case` por
+      `tipo`), devolvendo `atrasada = prazo < now() and not cumprida` para
+      a UI pintar a vermelho
 - [ ] `dr_atividade_declarar`
 - [ ] `dr_atividades_publicas`
+- [ ] Semear `atividade_tipos` com os dezasseis tipos (doze `ativo=true`,
+      quatro do pp-utilities `ativo=false`)
 
 ### Fase 2 — frontend
-- [ ] Página da professora: criar atividade (escolhe tipo do catálogo ou
-      deixa livre, título, texto formatado, prazo, alvo)
-- [ ] "As minhas atividades" (empresa, com portão): texto da atividade + prova
-      ao vivo ou formulário de autodeclaração
+- [ ] Página da professora: criar atividade (escolhe tipo do catálogo —
+      só os `ativo=true` aparecem — ou deixa livre, título, texto
+      formatado, prazo, alvo)
+- [ ] "As minhas atividades" (empresa, com portão): texto da atividade +
+      prova ao vivo ou formulário de autodeclaração; atrasada = selo
+      vermelho
 - [ ] Montra pública de atividades ativas
 - [ ] Cache-busting, teste num Chrome a sério, publicar
 
----
-
-## Decisão que continua tua
-
-- **Encerrar uma atividade** — apagar, marcar `encerrada`, ou deixar viva até
-  ao prazo passar sozinho? Proponho `encerrada` (nunca apagar histórico), mas
-  confirma.
-- **Quinto+ tipo do catálogo** — para além dos quatro iniciais, há mais
-  algum cumprimento que valha a pena verificar automaticamente já na v1, ou
-  ficam esses quatro e cresce-se depois?
+### Fase 3 — quando o pp-utilities nascer
+- [ ] Escrever os quatro ramos do `case` que faltam (água/energia/internet/
+      aluguel) e virar `ativo=true` nessas quatro linhas do catálogo —
+      nada mais no Diário muda.
