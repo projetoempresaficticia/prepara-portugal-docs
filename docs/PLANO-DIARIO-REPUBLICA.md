@@ -1,3 +1,12 @@
+> **Estado em 10 de setembro de 2026:** todo o código das Fases 0, 1 e 2
+> está escrito, publicado e testado estruturalmente (Chrome real,
+> puppeteer-core — sem erros de consola, 0 falhas de contraste novas,
+> editor de formatação confirmado a funcionar). **Falta aplicar
+> `sql/001` a `005` ao Supabase e testar o fluxo de ponta a ponta** — a
+> ligação MCP caiu a meio desta sessão e continua desligada. Os passos
+> "aplicar"/"testar com SQL real" de cada tarefa abaixo ficam por marcar
+> até isso acontecer.
+
 # Plano de implementação — Diário da República (atividades)
 
 **Objetivo:** a professora publica uma atividade obrigatória; o Correio
