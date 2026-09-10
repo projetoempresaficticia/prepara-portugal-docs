@@ -11,9 +11,17 @@
 > `documentos.criado_em` (não `criada_em`), e `v_decl` como `record` a
 > embrulhar a prova da autodeclaração em vez de a devolver direta.
 >
-> Fase 2 (frontend) continua só testada estruturalmente (Chrome real,
-> sem sessão real) — falta um teste de ponta a ponta pela interface, que
-> pede credenciais de teste que ainda não tenho.
+> **Teste de ponta a ponta pela interface, feito em 10 de setembro de
+> 2026** (senha de teste `1234` em `germano@prepara.pt` e na professora,
+> autorizada pelo Germano): login real da professora → publicar uma
+> atividade pela própria UI → mensagem de sucesso "3 pessoa(s)
+> avisada(s) por Correio" → aparece na montra pública. Login real da
+> empresa (Padaria Central) → "As minhas atividades" mostra as três
+> atividades certas, com a verificação automática de `publicar_vaga` já
+> "Cumprida" (a vaga de teste publicada mais cedo na sessão), a
+> autodeclaração já "Cumprida" com o anexo, e a atividade dirigida só a
+> ela com o botão de declarar. Zero erros de consola em toda a jornada.
+> **O Diário da República está completo e funcional de ponta a ponta.**
 
 # Plano de implementação — Diário da República (atividades)
 
