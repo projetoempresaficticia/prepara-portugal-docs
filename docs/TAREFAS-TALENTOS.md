@@ -4,8 +4,9 @@
 > candidatam-se com CV em PDF, a empresa vê e avalia. A app está na
 > `talentos/` (foi renomeada de `pp-emprego`).
 
-**Estado medido em 6 de setembro de 2026.** Identidade visual e camada de
-dados completas e testadas; frontend por construir.
+**Estado medido em 6 de setembro de 2026.** Identidade visual, camada de
+dados e frontend completos e testados. Falta testar num telemóvel a
+sério e resolver a integração com `pp-criar-empresa`.
 
 ---
 
@@ -51,7 +52,7 @@ dados completas e testadas; frontend por construir.
   `emprego_minhas_candidaturas`, e a notificação (secção 4, agora
   fechada e implementada).
 
-### Duas correções ao desenho original
+### Três correções ao desenho original
 
 1. **`emprego_candidatar` não recebe o caminho do CV como parâmetro.** A
    skill previa `emprego_candidatar(vaga_id, cv_url)`. Isso abre uma
@@ -62,6 +63,13 @@ dados completas e testadas; frontend por construir.
    A função passa a calcular o caminho sozinha, a partir da cédula
    resolvida no servidor e do `vaga_id`.
 2. **Sem tabela `curriculos_meta`** — ver acima.
+3. **`vaga_publica(uuid)`, RPC nova que a skill não previa** (acrescentada
+   já na fase de frontend, `sql/005`). `vagas_publicas()` lista, mas não
+   há como o PostgREST embeber o nome da empresa ao ler uma vaga isolada
+   por `.from()`: `vagas.empresa_cedula` é texto, sem FK para
+   `empresas.cedula` (decisão de propósito de toda a base — cédulas
+   seguem-se por convenção, não por FK). Uma RPC resolve num pedido só o
+   que senão seriam dois.
 
 ### Testado (30 passos, três pessoas: Germano/Padaria Central como
 empresa, Rita e Tiago como candidatos)
@@ -88,32 +96,46 @@ esperados, porque é essa a porta que as RPC são supostas ser.
 
 ## O que falta
 
-### 1. Frontend (HTML + JS, sem framework)
+### 1. Frontend (HTML + JS, sem framework) — CONCLUÍDO em 6 de setembro
 
-> Ordem: **pública** primeiro (é o que existe sem login), **empresa**
-> a seguir (a parte fechada do produto), **candidato** por fim.
+> Uma diferença desta app para as anteriores: ficheiros à raiz do
+> repositório (`vaga.html`, `empresa.html`, …), não em subpastas
+> `web/publico/`, `web/empresa/`, `web/candidato/` como o plano original
+> desta lista previa. `ferramentas/versoes.py` só varre `*.html` à raiz
+> (`RAIZ.glob('*.html')`, sem recursão) — um layout em subpastas
+> quebraria o carimbo de versão. Segue o mesmo padrão da Segurança
+> Social.
 
-- [ ] `web/biblioteca/comum.css` e `.js` — reaproveitar o padrão dos
-      outros apps (`pu.css`/`pu.js`, `am.css`/`am.js`): variáveis,
+- [x] `web/biblioteca/ta.css` e `ta.js` — variáveis da paleta corrigida,
       botão terracota, campo com borda `#9C867F`, `esc()`,
-      `mostrarMsg()`, `comVersao()`/`versionarLinks()`.
-- [ ] `index.html` já existe (entrada estática) — falta o login real.
-- [ ] `web/publico/vagas.html` — lista de vagas publicadas
-      (`vagas_publicas`), sem login. Porta de entrada do site.
-- [ ] `web/publico/candidatura.html?vaga=…` — upload do CV
-      (`sb.storage.from('curriculos').upload(...)`) e depois
-      `emprego_candidatar(vaga_id)`.
-- [ ] `web/empresa/painel.html` — `minhas_vagas()`, criar/publicar/arquivar.
-- [ ] `web/empresa/vaga.html?id=…` — `emprego_candidaturas_da_vaga`, botão
-      "ver CV" com `createSignedUrl` (10 min), campo de justificativa ao
-      aprovar/reprovar.
-- [ ] `web/candidato/minhas.html` — `emprego_minhas_candidaturas()`,
-      mostra a justificativa. Tempo real pela mesma subscrição do
-      AeroMail (`correio-<minhaCedula>`).
-- [ ] **Cache-busting** — `python ferramentas/versoes.py` antes de
-      cada commit.
-- [ ] **Testar num telemóvel a sério** — nunca foi visto em nenhum
-      dos oito apps anteriores.
+      `mostrarMsg()`, `comVersao()`/`versionarLinks()`, `montarTopo()`
+      (cabeçalho único partilhado pelas 5 páginas), avatar por cédula,
+      selos de estado, `ligarFormularioLogin()`/`perguntar()` reutilizáveis.
+- [x] `index.html` — montra pública (`vagas_publicas`), sem login;
+      "Entrar" abre uma janela contextual, não um portão de página.
+- [x] `vaga.html` — detalhe de uma vaga (`vaga_publica`, nova RPC — ver
+      abaixo) + candidatura por CV (`sb.storage...upload` seguido de
+      `emprego_candidatar`), com a mesma janela de login contextual: só
+      pede sessão no momento de candidatar, nunca para ler a vaga.
+- [x] `empresa.html` — `minhas_vagas()`, criar/publicar/arquivar, com
+      portão de página inteira (só quem tem sessão E empresa vê o painel).
+- [x] `gerir-vaga.html` — `emprego_candidaturas_da_vaga`, "ver CV" com
+      `createSignedUrl` (60s), aprovar com justificação opcional,
+      reprovar com justificação obrigatória.
+- [x] `candidaturas.html` — `emprego_minhas_candidaturas()`, mostra a
+      justificativa. Tempo real pela mesma subscrição do AeroMail
+      (`correio-<minhaCedula>`): quando a notificação de aprovado/
+      reprovado chega, a lista recarrega-se sozinha.
+- [x] **Cache-busting** — `python ferramentas/versoes.py` corrido antes
+      do commit; versão do site `d53ffbba6cf4`.
+- [x] Testado num Chrome a sério (puppeteer-core, headless): as 5
+      páginas sem erros de consola; `vaga_publica` confirmada a recusar
+      vaga arquivada (limite de segurança); formulário de login exercido
+      contra o Supabase real com senha errada; layout responsivo checado
+      em emulação de telemóvel (390×844, iOS).
+- [ ] **Testar num telemóvel a FÍSICO a sério** — só foi feito em
+      emulação; nunca foi visto num aparelho real em nenhum dos oito
+      apps anteriores.
 
 ### 2. Integração com o resto do ecossistema
 
