@@ -335,13 +335,14 @@ begin
   values (v_id, v_titulo, v_texto, p_tipo, p_alvo_todas, coalesce(p_alvo_cedulas, '{}'), p_prazo,
           public.fn_minha_cedula());
 
-  -- aviso por Correio a cada empresa visada — uma mensagem por gerente
-  -- de empresa (pessoas.papel = 'gerente'), remetente é a cédula real
-  -- do Diário, nunca uma cédula de sistema inventada
+  -- aviso por Correio a toda a gente da empresa visada, não só o
+  -- gerente (quem trata da guia de IVA costuma ser o contabilista) —
+  -- remetente é a cédula real do Diário, nunca uma cédula de sistema
+  -- inventada
   for v_empresa in
     select e.cedula, p.cedula as pessoa_cedula
       from public.empresas e
-      join public.pessoas p on p.empresa_id = e.id and p.papel = 'gerente'
+      join public.pessoas p on p.empresa_id = e.id
      where p_alvo_todas or e.cedula = any(p_alvo_cedulas)
   loop
     insert into public.correio(id, de_cedula, para_cedula, assunto, corpo)
