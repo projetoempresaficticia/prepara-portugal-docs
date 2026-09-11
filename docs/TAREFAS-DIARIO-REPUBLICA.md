@@ -16,6 +16,15 @@ topo de `docs/PLANO-DIARIO-REPUBLICA.md` para a forma atual. A UI de
 "Publicar atividade" também foi redesenhada (tags em vez de `<select>`,
 alternador com ícone de empresa + lista real em vez de radio buttons).
 
+**Atualização de 11 de setembro de 2026 (2ª ronda):** página nova
+`acompanhar.html` — a professora vê, por atividade publicada, quantas e
+quais empresas já cumpriram, sem entrar em cada uma (`sql/007`). Cada
+prova passou também a trazer o número de protocolo/referência e, quando
+existe um documento assinado a sério por trás, um botão "Ver documento"
+que abre o ficheiro real via signed URL do Storage (`sql/008`). Ver a
+atualização no topo de `docs/PLANO-DIARIO-REPUBLICA.md` para os detalhes
+técnicos e os testes feitos.
+
 ---
 
 ## O que a app faz (redefinido — não é o que a `pp-orgaos` previa)

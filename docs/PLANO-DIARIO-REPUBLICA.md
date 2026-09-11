@@ -57,6 +57,50 @@
 > do cartão com E lógico. Auditor de contraste (WCAG real, Chrome
 > a sério) sem falhas em nenhuma das duas páginas, ecrã largo e
 > telemóvel.
+>
+> **Atualização de 11 de setembro de 2026 (2ª ronda) — painel da
+> professora e prova real por trás de cada tipo.** Duas peças novas,
+> pedidas diretamente pelo Germano depois de ver o painel:
+>
+> 1. **`acompanhar.html` — a professora só tinha "Publicar atividade";
+>    não havia forma de ver quem já cumpriu sem entrar empresa a
+>    empresa.** Página nova (`sql/007_professor_acompanhar.sql`): a
+>    lógica de verificação de `dr_minhas_atividades` foi extraída para
+>    `fn_verificar_atividade_empresa(atividade_id, empresa)` — sem grant
+>    a `authenticated`/`anon`, só chamável a partir de outra função
+>    `security definer` do mesmo dono — e `dr_minhas_atividades` passa a
+>    chamá-la para a empresa da sessão; `dr_professor_acompanhar()`
+>    (novo, gated em `fn_e_professor()`) chama-a para cada empresa visada
+>    por cada atividade. Um cartão por atividade com barra de progresso
+>    (`X de Y empresas`, reaproveita `.dr-progresso` já existente) e uma
+>    tabela expansível por empresa. Testado com SQL real: empresa não
+>    consegue chamar nem o painel nem o verificador diretamente
+>    (`permission denied`); `dr_minhas_atividades` confirmado idêntico ao
+>    resultado de antes do refactor. Corrigido também um efeito
+>    colateral real: com o link novo, o cabeçalho deixou de caber numa
+>    linha a 390px (três links + Sair sobrepunham-se) — a nav agora
+>    quebra para a linha de baixo no telemóvel.
+> 2. **"Cumprida" sozinho não prova nada — protocolo + documento real.**
+>    `sql/008_prova_com_documento.sql`: cada prova de tipo baseado em
+>    `submissoes` passa a incluir `documento_id`/`arquivo_caminho`/
+>    `arquivo_nome` (via `assinatura_doc_id → documentos`), e
+>    `pagar_salario` ganha `codigo_auth`. Botão "Ver documento" (novo
+>    `botaoVerDocumento()`/`ligarBotoesDocumento()`/
+>    `abrirDocumentoStorage()` partilhados em `dr.js`) gera um signed URL
+>    do bucket certo (`documentos` para submissões assinadas, `atividades`
+>    para autodeclaração) e abre num separador — sem policy nova, porque
+>    `fn_documento_visivel` já devolve `true` para `fn_e_professor()` e a
+>    policy "professor lê todas as declarações" já cobria o bucket
+>    `atividades`. Dois bugs reais apanhados a testar: um `alert()` no
+>    caminho de erro travava o Chrome sem cabeça à espera de um clique
+>    que nunca vinha (trocado por mensagem inline no próprio botão, igual
+>    ao resto do app); e várias linhas antigas de `storage.objects`
+>    (seedadas por SQL direto em rondas de teste anteriores) só têm a
+>    metadata, sem o ficheiro real por trás — o botão mostra "Documento
+>    não encontrado" nesses casos em vez de falhar em silêncio. Confirmado
+>    um caso real de ponta a ponta (protocolo `CT-2026-000003`, Cartório)
+>    com `fetch` do signed URL a devolver o PDF verdadeiro (200,
+>    `application/pdf`).
 
 # Plano de implementação — Diário da República (atividades)
 
